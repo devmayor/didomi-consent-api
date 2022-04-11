@@ -8,6 +8,6 @@ import { Events } from 'src/models/events.model';
 @Module({
   controllers: [EventController],
   providers: [EventService],
-  imports: [SequelizeModule.forFeature([User, Events])]
+  imports: [SequelizeModule.forFeature([User, Events])],
 })
 export class EventModule {}

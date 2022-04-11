@@ -8,5 +8,3 @@ export class CreateUserDto {
   @Validate(EmailExistsRule)
   email: string;
 }
-
-

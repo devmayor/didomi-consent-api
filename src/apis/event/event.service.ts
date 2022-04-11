@@ -16,44 +16,39 @@ export class EventService {
     private userModel: typeof User,
   ) {}
 
-  async create({ email, consents }: CreateEventDto) {
-    const user = await this.userModel.findOne({
+  async create({ user, consents }: CreateEventDto): Promise<any> {
+    const userData = await this.userModel.findOne({
       where: {
-        email,
+        userId: user.id as string,
       },
     });
-    if (!user) {
+
+    if (!userData) {
       // Returns a 422 error code
       throw new HttpException('Unknown User', HttpStatus.UNPROCESSABLE_ENTITY);
     }
-    const newConsents = [];
-    const changedConsents = [];
 
-    for (const consent in consents) {
-      changedConsents.push(consent);
-      if (consents[consent]) {
-        newConsents.push(consent);
+    let currentConsentState = Object.values(userData.consents);
+    consents.forEach((consent) => {
+      if (consent.enabled) {
+        if (!currentConsentState.includes(consent.id)) {
+          currentConsentState.push(consent.id);
+        }
+      } else {
+        currentConsentState = currentConsentState.filter(
+          (state) => state != consent.id,
+        );
       }
-    }
-
-    user.consents = newConsents;
+    });
+    userData.consents = currentConsentState;
+    await userData.save();
 
     await this.eventModel.create({
       eventId: uuidv4(),
-      userId: user.id,
-      consents: newConsents,
+      userId: userData.id,
+      consents: userData.consents,
     });
-    await user.save();
 
-    return this.formatEvents(user, changedConsents);
-  }
-
-  formatEvents(user: User, changedConsents): EventType {
-    return {
-      user: {
-        id: user.userId,
-      },
-      consents: formatConsents(user.consents, changedConsents),
-    };
+    return { user, consents };
   }
 }

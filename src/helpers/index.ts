@@ -1,15 +1,14 @@
-import { Consent } from "src/enums";
+import { Consent } from 'src/enums';
 
 /**
- * This function reformats an array of Consent into a 
+ * This function reformats an array of Consent into a
  * an object that can be passed in a response
  */
 export const formatConsents = (consents: Consent[], displayConsents) => {
-
-    return displayConsents.map((consent) => {
-      return {
-        id: consent,
-        enabled: consents.includes(consent),
-      };
-    });
-  };
+  return displayConsents.map((consent) => {
+    return {
+      id: consent,
+      enabled: consents.includes(consent),
+    };
+  });
+};

@@ -13,9 +13,9 @@ export class UserService {
     @InjectModel(User)
     private userModel: typeof User,
   ) {}
-  /** 
+  /**
    * @todo Api needs to be protected with an authentication
-  */
+   */
   async create({ email }: CreateUserDto) {
     const user = await this.userModel.create({
       userId: uuidv4(),

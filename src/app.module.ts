@@ -6,8 +6,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import config from '../config';
 
 @Module({
-  imports: [UserModule
-    , EventModule,
+  imports: [
+    UserModule,
+    EventModule,
     ConfigModule.forRoot({
       load: [config],
     }),
@@ -26,7 +27,8 @@ import config from '../config';
         synchronize: false,
       }),
       inject: [ConfigService],
-    })],
+    }),
+  ],
   controllers: [],
   providers: [],
 })

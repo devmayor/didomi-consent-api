@@ -8,6 +8,6 @@ import { EmailExistsRule } from './validation/UserExists';
 @Module({
   controllers: [UserController],
   providers: [UserService, EmailExistsRule],
-  imports: [SequelizeModule.forFeature([User])]
+  imports: [SequelizeModule.forFeature([User])],
 })
 export class UserModule {}

@@ -1,32 +1,34 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Consent } from 'src/enums';
 import { EventController } from '../src/apis/event/event.controller';
 import { EventService } from '../src/apis/event/event.service';
 
 describe('EventController', () => {
   let controller: EventController;
   const createResponse = {
-    "user": {
-      "id": "62729707-ff6f-415f-9eff-0fd9b3d2b890"
+    user: {
+      id: '6b747b16-c42c-4ce8-8d57-21008da59c26',
     },
-    "consents": [
+    consents: [
       {
-        "id": "sms_notifications",
-        "enabled": true
-      }
-    ]
-  }
+        id: Consent.SMS,
+        enabled: true,
+      },
+    ],
+  };
   beforeEach(async () => {
-    
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EventController],
-      providers: [{
-        provide: EventService,
-        useValue: {
-          create: jest.fn(() => {
-            return createResponse
-          }),
+      providers: [
+        {
+          provide: EventService,
+          useValue: {
+            create: jest.fn(() => {
+              return createResponse;
+            }),
+          },
         },
-      }],
+      ],
     }).compile();
 
     controller = module.get<EventController>(EventController);
@@ -34,11 +36,15 @@ describe('EventController', () => {
 
   it('should be defined', async () => {
     const createEvent = await controller.create({
-      "email": "test@gmail.com",
-      "consents": {
-        "email_notifications": false,
-        "sms_notifications": true
-      }
+      user: {
+        id: '6b747b16-c42c-4ce8-8d57-21008da59c26',
+      },
+      consents: [
+        {
+          id: Consent.SMS,
+          enabled: true,
+        },
+      ],
     });
     expect(createEvent).toEqual(createResponse);
   });

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import {
-    ValidationArguments,
+  ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
@@ -18,10 +18,10 @@ export class EmailExistsRule implements ValidatorConstraintInterface {
   async validate(email: string) {
     try {
       const user = await this.userModel.findOne({
-        where: {email},
+        where: { email },
       });
-      if(user){
-          throw new Error();
+      if (user) {
+        throw new Error();
       }
     } catch (e) {
       return false;

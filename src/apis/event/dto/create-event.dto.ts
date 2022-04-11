@@ -1,25 +1,37 @@
-
-import { IsString, IsNotEmpty, IsEmail, IsDefined, ValidateNested, IsBoolean, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsDefined,
+  ValidateNested,
+  IsBoolean,
+  IsArray,
+  IsEnum,
+} from 'class-validator';
 import { Type } from 'class-transformer';
+import { Consent } from 'src/enums';
 
 class Consents {
-    @IsBoolean()
-    @IsOptional()
-    email_notifications?: Boolean;
-  
-    @IsBoolean()
-    @IsOptional()
-    sms_notifications?: Boolean;
-  }
-export class CreateEventDto {
-  @IsNotEmpty()
+  @IsDefined()
+  @IsEnum(Consent)
+  id: Consent;
+
+  @IsBoolean()
+  @IsDefined()
+  enabled: boolean;
+}
+
+class User {
   @IsString()
-  @IsEmail()
-  email: string;
+  id: String;
+}
+export class CreateEventDto {
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => User)
+  user: User;
 
   @IsDefined()
-  @IsNotEmpty()
-  @ValidateNested()
+  @IsArray()
+  @ValidateNested({ each: true })
   @Type(() => Consents)
-  consents:  Consents;
+  consents: Consents[];
 }

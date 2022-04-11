@@ -1,5 +1,6 @@
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Consent } from 'src/enums';
 import { Events } from 'src/models/events.model';
 import { User } from 'src/models/user.model';
 import { EventService } from '../src/apis/event/event.service';
@@ -42,14 +43,26 @@ describe('EventService', () => {
   });
 
   it('should create events', async () => {
-    const consents = { email_notifications: false, sms_notifications: true };
-    const event = await service.create({ email: 'test@gmail.com', consents });
+    const consents = [
+      {
+        id: Consent.EMAIL,
+        enabled: true,
+      },
+      {
+        id: Consent.SMS,
+        enabled: true,
+      },
+    ];
+    const event = await service.create({
+      user: { id: '62729707-ff6f-415f-9eff-0fd9b3d2b890' },
+      consents,
+    });
     expect(event).toEqual({
       user: { id: '62729707-ff6f-415f-9eff-0fd9b3d2b890' },
       consents: [
-        { id: 'email_notifications', enabled: false },
-        { id: 'sms_notifications', enabled: true }
-      ]
+        { id: 'email_notifications', enabled: true },
+        { id: 'sms_notifications', enabled: true },
+      ],
     });
   });
 });

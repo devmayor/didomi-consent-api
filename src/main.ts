@@ -9,9 +9,7 @@ import { useContainer } from 'class-validator';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Set auto validation using DTO for APIs and Auto Transform for those values
-  app.useGlobalPipes(
-    new ValidationPipe({ transform: true, whitelist: true, }),
-  );
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
   // Set up global exception filter to cath all Unknown 500 errors
   const { httpAdapter } = app.get(HttpAdapterHost);

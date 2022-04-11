@@ -1,9 +1,9 @@
-import { ConsentType } from "../users/user.typing";
+import { ConsentType } from '../users/user.typing';
 
 type User = {
-    id: string
-}
+  id: string;
+};
 export type EventType = {
-    user: User;
-    consents: ConsentType[]
-}
+  user: User;
+  consents: ConsentType[];
+};

@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 @Injectable()
 export class LoggingService implements LoggerService {
-  private logger: Console ;
+  private logger: Console;
   constructor() {
     if (process.env.NODE_ENV !== 'local') {
       this.initializeLogger();
