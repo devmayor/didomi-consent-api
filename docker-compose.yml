@@ -1,0 +1,44 @@
+version: "3.5"
+services:
+  dd-api:
+    build:
+      context: .
+    networks:
+      - dd-net
+    env_file:
+      - .env
+    environment:
+      - PORT=4000
+      - DB_HOST=dd-db
+      - DB_USER=dd-user
+      - DB_DATABASE=didomi
+      - DB_PASSWORD=dd-password
+    ports:
+      - 4000:4000
+    depends_on:
+      - dd-db
+    # What's going on with the bash stuff here? - This is just to ensure that the data base service
+    # is not only started but ready to accept connection before starting the api service.
+    command: bash -c 'while !</dev/tcp/dd-db/5432; do sleep 1; done; npm run start:prod'
+  dd-db:
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      # setting the credentials as open text here since this is for local/development
+      # purposes
+      POSTGRES_USER: dd-user
+      POSTGRES_PASSWORD: dd-password
+      POSTGRES_DB: didomi
+    volumes:
+      - dd-vol:/var/lib/postgresql/data
+    networks:
+     - dd-net
+
+volumes:
+  dd-vol:
+
+networks:
+  dd-net:
+    driver: bridge
+    
